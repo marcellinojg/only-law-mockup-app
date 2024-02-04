@@ -1,9 +1,10 @@
 
 
 export const buildListParams = (key: string, list: string[]) => {
-    return list.length !== 0 ? `${key}=${list.join('%')}` : ''
+    console.log(`${key}=${list.join('_')}`)
+    return list.length !== 0 ? `${key}=${list.join('_')}` : ''
 }
 
 export const extractListParams = (params : string) => {
-    return params.split('%')
+    return params.split('_')
 }

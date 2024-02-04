@@ -36,7 +36,7 @@ const SearchScreen = () => {
     }
 
     const handleAddTag = (tag: string) => {
-        if (selectedTags.length >= 3) return
+        if (selectedTags.length >= 3 || selectedTags.includes(tag)) return
 
         setSelectedTags(prev => [...prev, tag])
     }

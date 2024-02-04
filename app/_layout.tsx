@@ -46,7 +46,7 @@ function RootLayoutNav() {
   return (
     <PaperProvider theme={theme}>
       <Stack screenOptions={{ headerShown: false }} initialRouteName='index'>
-        <Stack.Screen name='search/index' options={{ animation: 'slide_from_bottom' }} />
+        <Stack.Screen name='(search)/search' options={{ animation: 'slide_from_bottom' }} />
       </Stack>
     </PaperProvider>
   );
