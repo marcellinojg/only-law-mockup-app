@@ -4,6 +4,7 @@ import { Slot, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { DefaultTheme, PaperProvider } from 'react-native-paper';
+import 'expo-dev-client';
 
 
 export {
