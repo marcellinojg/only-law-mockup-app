@@ -14,7 +14,7 @@ const LawyersSearchResultScreen = () => {
     const theme = useTheme()
     const { tags } = useLocalSearchParams<{ tags: string }>()
     const tagsList = tags && extractListParams(tags)
-    const route = useRouteInfo()
+    const foundLawyers = tags ? dataDummyLawyer.filter((lawyer => lawyer.tags.some(tag => tags.includes(tag)))) : [...dataDummyLawyer]
     return <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.primary }]}>
         <StatusBar style='light' />
         <View style={styles.wrapper}>
@@ -68,7 +68,7 @@ const LawyersSearchResultScreen = () => {
                     gap: 16,
                     paddingHorizontal: Platform.OS === 'android' ? Dimensions.get('window').width * 0.05 : 0
                 }}
-                snapToOffsets={dataDummyLawyer.map((_, index) => (Dimensions.get('window').width * 0.9 * index) + (16 * index))}
+                snapToOffsets={foundLawyers.map((_, index) => (Dimensions.get('window').width * 0.9 * index) + (16 * index))}
                 snapToAlignment={"center"}
                 contentInset={{ // iOS ONLY
                     top: 0,
@@ -77,7 +77,7 @@ const LawyersSearchResultScreen = () => {
                     right: Dimensions.get('window').width * 0.05
                 }}
             >
-                {dataDummyLawyer.map((lawyer, index) =>
+                {foundLawyers.map((lawyer, index) =>
                     <View style={styles.card} key={`${lawyer.name}_${index}`}>
                         <ScrollView
                             nestedScrollEnabled={true}

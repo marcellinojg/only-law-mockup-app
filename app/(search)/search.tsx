@@ -1,3 +1,5 @@
+import dataDummyLawyer from "@/constants/dummyLawyer"
+import availableTags from "@/constants/dummyTags"
 import layoutS from "@/styles/layout"
 import { buildListParams } from "@/util/routeHelpers"
 import { Link, useNavigation } from "expo-router"
@@ -6,6 +8,7 @@ import { useState } from "react"
 import { StyleSheet, View } from "react-native"
 import { Button, IconButton, Text, TextInput, useTheme } from "react-native-paper"
 import { SafeAreaView } from "react-native-safe-area-context"
+import _ from "lodash"
 
 
 const SearchScreen = () => {
@@ -14,26 +17,7 @@ const SearchScreen = () => {
     const [search, setSearch] = useState<string>("")
     const [hideTrendingTags, setHideTrendingTags] = useState<boolean>(false)
 
-    // TEMPORARY, MOCKUP PURPOSES
-    const availableTags = ['Strafrecht', 'Familienrecht', 'Demonstrationsrecht', 'Erbschaftrecht', 'Sozialrecht', 'Datenschutz', 'Mietminderung', 'HomeOffice']
-    let foundText = 'Alle Suchergebnisse anzeigen'
-
-    switch (selectedTags.length) {
-        case 0:
-            foundText = 'Alle Suchergebnisse anzeigen'
-            break
-        case 1:
-            foundText = '8 Suchergebnisse anzeigen'
-            break
-        case 2:
-            foundText = '17 Suchergebnisse anzeigen'
-            break
-        case 3:
-            foundText = '32 Suchergebnisse anzeigen'
-            break
-        default:
-            break
-    }
+    const countFoundLawyers = dataDummyLawyer.filter((lawyer) => lawyer.tags.some(tag => selectedTags.includes(tag))).length
 
     const handleAddTag = (tag: string) => {
         if (selectedTags.length >= 3 || selectedTags.includes(tag)) return
@@ -113,7 +97,9 @@ const SearchScreen = () => {
                         icon={'arrow-right-thin'}
                         labelStyle={{ fontSize: 32 }}
                     >
-                        <Text variant="bodyLarge" style={{ color: 'white' }}>{foundText}</Text>
+                        <Text variant="bodyLarge" style={{ color: 'white' }}>
+                            {selectedTags.length != 0 ? `${countFoundLawyers} Suchergebnisse anzeigen` : 'Alle Suchergebnisse anzeigen'}
+                        </Text>
                     </Button>
                 </Link>
             </View>
