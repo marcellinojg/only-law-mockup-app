@@ -1,14 +1,15 @@
 import dataDummyLawyer from "@/constants/dummyLawyer"
-import availableTags from "@/constants/dummyTags"
+import { availableTags, popularTags } from "@/constants/dummyTags"
 import layoutS from "@/styles/layout"
 import { buildListParams } from "@/util/routeHelpers"
-import { Link, useNavigation } from "expo-router"
+import { Link } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { useState } from "react"
-import { StyleSheet, View } from "react-native"
-import { Button, IconButton, Text, TextInput, useTheme } from "react-native-paper"
+import { Image, Keyboard, StyleSheet, View } from "react-native"
+import { Button, IconButton, List, Text, TextInput, useTheme } from "react-native-paper"
 import { SafeAreaView } from "react-native-safe-area-context"
 import _ from "lodash"
+import DismissKeyboard from "@/components/DismissKeyboard"
 
 
 const SearchScreen = () => {
@@ -16,10 +17,18 @@ const SearchScreen = () => {
     const [selectedTags, setSelectedTags] = useState<string[]>([])
     const [search, setSearch] = useState<string>("")
     const [hideTrendingTags, setHideTrendingTags] = useState<boolean>(false)
-
     const countFoundLawyers = dataDummyLawyer.filter((lawyer) => lawyer.tags.some(tag => selectedTags.includes(tag))).length
 
     const handleAddTag = (tag: string) => {
+        if (selectedTags.length >= 3 || selectedTags.includes(tag)) return
+
+        setSelectedTags(prev => [...prev, tag])
+    }
+
+    const handleAddTagViaSearch = (tag: string) => {
+        setHideTrendingTags(false)
+        Keyboard.dismiss()
+        setSearch('')
         if (selectedTags.length >= 3 || selectedTags.includes(tag)) return
 
         setSelectedTags(prev => [...prev, tag])
@@ -59,7 +68,7 @@ const SearchScreen = () => {
                     <View style={[styles.sections, styles.sectionTags, layoutS.flexColCenterStart]}>
                         <Text style={{ color: 'white' }} variant="labelLarge">Aktulle Trend Tags:</Text>
                         <View style={[layoutS.flexRowStartCenter, { paddingTop: 16, flexWrap: 'wrap', gap: 10 }]}>
-                            {availableTags.map((tag, index) =>
+                            {popularTags.map((tag, index) =>
                                 <Button
                                     uppercase
                                     buttonColor="transparent"
@@ -76,32 +85,75 @@ const SearchScreen = () => {
                     </View>
                 </>
             }
+            {hideTrendingTags &&
+                <View style={{ flex: 8, paddingTop: 20 }}>
+                    {search.length !== 0 &&
+                        <>
+                            {availableTags.filter((tag) => tag.toLowerCase().includes(search.toLowerCase())).splice(0, 3).map((tag, index) =>
+                                <List.Item
+                                    key={`${tag}_${index}`}
+                                    title={tag}
+                                    onPress={() => handleAddTagViaSearch(tag)}
+                                    rippleColor={'white'}
+                                    titleStyle={{ color: 'white', fontSize: 20 }}
+                                    style={{ paddingVertical: 0, paddingRight: 0 }}
+                                    contentStyle={{ paddingVertical: 12 }}
+                                />
+                            )}
+                            {availableTags.filter((tag) => tag.toLowerCase().includes(search.toLowerCase())).length == 0 &&
+                                <>
+                                    <Image source={require('@/assets/images/tagsnotfound-illus.png')} style={{ objectFit: 'cover', width: 240, height: 240, alignSelf: 'center' }} />
+                                    <Text variant="titleLarge" style={{ color: 'white', textAlign: 'center' }} >
+                                        Keine Tags gefunden
+                                    </Text>
+                                </>
+                            }
+                        </>
+
+                    }
+                    {search.length == 0 &&
+                        <>
+                            <Image source={require('@/assets/images/search-illus.png')} style={{ objectFit: 'cover', width: 240, height: 240, alignSelf: 'center' }} />
+                            <Text variant="titleLarge" style={{ color: 'white', textAlign: 'center' }} >
+                                Bitte geben Sie einen Tag ein
+                            </Text>
+                        </>
+                    }
+                </View>
+            }
             <View style={[styles.sections, styles.sectionSearch]}>
-                <TextInput
-                    placeholder="Wir helfen dir!"
-                    textColor="black"
-                    onFocus={() => setHideTrendingTags(true)}
-                    onEndEditing={() => setHideTrendingTags(false)}
-                    theme={theme}
-                    style={{ backgroundColor: 'white' }}
-                    left={<TextInput.Icon icon={'magnify'} />}
-                    value={search}
-                    onChangeText={setSearch}
-                    right={<TextInput.Icon icon={'filter'} onPress={() => console.log('test')} containerColor={theme.colors.primary} color={'white'} mode="contained-tonal" size={20} />}
-                />
-                <Link asChild href={`/lawyers?${buildListParams('tags', selectedTags)}`}>
-                    <Button
-                        mode="text"
-                        textColor="white"
-                        contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'flex-end' }}
-                        icon={'arrow-right-thin'}
-                        labelStyle={{ fontSize: 32 }}
-                    >
-                        <Text variant="bodyLarge" style={{ color: 'white' }}>
-                            {selectedTags.length != 0 ? `${countFoundLawyers} Suchergebnisse anzeigen` : 'Alle Suchergebnisse anzeigen'}
-                        </Text>
-                    </Button>
-                </Link>
+                {hideTrendingTags &&
+                    <Text variant="bodyMedium" style={{ color: 'lightgray', alignSelf:'center' }}>
+                        Suche nach Tags, Rechtsgebieten oder Anwälten:
+                    </Text>
+                }
+                <DismissKeyboard>
+                    <TextInput
+                        placeholder="Wir helfen dir!"
+                        textColor="black"
+                        onFocus={() => setHideTrendingTags(true)}
+                        onEndEditing={() => setHideTrendingTags(false)}
+                        style={{ backgroundColor: 'white', borderRadius: 6 }}
+                        left={<TextInput.Icon icon={'magnify'} />}
+                        value={search}
+                        onChangeText={setSearch}
+                    />
+                </DismissKeyboard>
+                {!hideTrendingTags &&
+                    <Link asChild href={`/lawyers?${buildListParams('tags', selectedTags)}`}>
+                        <Button
+                            mode="text"
+                            textColor="white"
+                            contentStyle={{ flexDirection: 'row-reverse', justifyContent: 'flex-end' }}
+                            icon={'arrow-right-thin'}
+                            labelStyle={{ fontSize: 32 }}
+                        >
+                            <Text variant="bodyLarge" style={{ color: 'white' }}>
+                                {selectedTags.length != 0 ? `${countFoundLawyers} Suchergebnisse anzeigen` : 'Alle Suchergebnisse anzeigen'}
+                            </Text>
+                        </Button>
+                    </Link>
+                }
             </View>
         </View>
     </SafeAreaView>

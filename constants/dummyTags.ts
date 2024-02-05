@@ -1,4 +1,4 @@
-const availableTags = [
+export const availableTags = [
     'Strafrecht',
     'Familienrecht',
     'Demonstrationsrecht',
@@ -6,7 +6,23 @@ const availableTags = [
     'Sozialrecht',
     'Datenschutz',
     'Mietminderung',
-    'HomeOffice'
+    'HomeOffice',
+    'Schlagwort',
+    'Markenrecht',
+    'Sorgerechtsverfuegung',
+    'Sorgerecht',
+    'Informationstechnologierecht',
+    'Mustertag',
+    'PolizeiKontrolle',
+]
+export const popularTags = [
+    'Strafrecht',
+    'Familienrecht',
+    'Demonstrationsrecht',
+    'Erbschaftrecht',
+    'Sozialrecht',
+    'Datenschutz',
+    'Mietminderung',
+    'HomeOffice',
 ]
 
-export default availableTags

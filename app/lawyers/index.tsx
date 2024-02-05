@@ -1,13 +1,14 @@
 import { useLocalSearchParams } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { Image, Platform, ScrollView, StyleSheet, View } from "react-native"
-import { Button, Icon, IconButton, Surface, Text, TouchableRipple, useTheme } from "react-native-paper"
+import { Icon, Text, TouchableRipple, useTheme } from "react-native-paper"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Dimensions } from "react-native"
 import layoutS from "@/styles/layout"
 import { extractListParams } from "@/util/routeHelpers"
-import { useRouteInfo } from "expo-router/build/hooks"
 import dataDummyLawyer from "@/constants/dummyLawyer"
+import FilterTags from "@/components/FilterTags"
+import LawyerScroller from "@/components/LawyerScroller"
 
 
 const LawyersSearchResultScreen = () => {
@@ -18,65 +19,8 @@ const LawyersSearchResultScreen = () => {
     return <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.primary }]}>
         <StatusBar style='light' />
         <View style={styles.wrapper}>
-            <View style={styles.filterContainer}>
-                <IconButton
-                    icon={'filter'}
-                    containerColor={theme.colors.primary}
-                    onPress={() => { }}
-                    iconColor="white"
-                    mode="contained-tonal"
-                    rippleColor={'white'}
-                />
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingRight: 8, gap: 8 }}
-                >
-
-                    {tagsList ? tagsList.map((tag, index) =>
-                        <View
-                            key={`${tag}_${index}`}
-                            style={[layoutS.flexRowCenter, styles.categoryTag]}
-                        >
-                            <Text
-                                variant="labelMedium"
-                                style={{ color: 'black', textTransform: 'uppercase' }}
-                            >
-                                {tag}
-                            </Text>
-                            <IconButton
-                                rippleColor={'lightgrey'}
-                                icon={'close'}
-                                size={16}
-                                borderless
-                                iconColor={theme.colors.primary}
-                                style={{ margin: 0 }}
-                                onPress={() => { }}
-                            />
-                        </View>
-                    ) : <Text variant="bodyLarge">Keine Tags ausgewählt</Text>}
-                </ScrollView>
-            </View>
-            <ScrollView
-                horizontal
-                nestedScrollEnabled={true}
-                showsHorizontalScrollIndicator={false}
-                decelerationRate={0}
-                pagingEnabled
-                contentContainerStyle={{
-                    gap: 16,
-                    paddingHorizontal: Platform.OS === 'android' ? Dimensions.get('window').width * 0.05 : 0
-                }}
-                snapToOffsets={foundLawyers.map((_, index) => (Dimensions.get('window').width * 0.9 * index) + (16 * index))}
-                snapToAlignment={"center"}
-                contentInset={{ // iOS ONLY
-                    top: 0,
-                    left: Dimensions.get('window').width * 0.05,
-                    bottom: 0,
-                    right: Dimensions.get('window').width * 0.05
-                }}
-            >
+            <FilterTags tags={tagsList} />
+            <LawyerScroller foundLawyers={foundLawyers}>
                 {foundLawyers.map((lawyer, index) =>
                     <View style={styles.card} key={`${lawyer.name}_${index}`}>
                         <ScrollView
@@ -109,7 +53,7 @@ const LawyersSearchResultScreen = () => {
                             <View style={[layoutS.flexRowStartCenter, { flexWrap: 'wrap', marginTop: 12, gap: 8 }]}>
                                 {lawyer.tags.map((tag, index) =>
                                     <View
-                                        style={[layoutS.flexRowCenter, styles.categoryTagInfo]}
+                                        style={[layoutS.flexRowCenter, styles.categoryTagInfo, {borderColor: tags && tagsList.includes(tag) ? theme.colors.secondary : 'black'}]}
                                         key={`${lawyer.name}_${tag}_${index}`}
                                     >
                                         <Text
@@ -136,7 +80,7 @@ const LawyersSearchResultScreen = () => {
                         </TouchableRipple>
                     </View>
                 )}
-            </ScrollView>
+            </LawyerScroller>
         </View>
 
     </SafeAreaView>
@@ -153,16 +97,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
     },
-    filterContainer: {
-        backgroundColor: 'white',
-        marginVertical: 12,
-        flexDirection: 'row',
-        gap: 8,
-        borderRadius: 8,
-        alignItems: 'center',
-        width: '90%',
-        alignSelf: 'center'
-    },
+
     card: {
         width: Dimensions.get('screen').width * 0.9,
         backgroundColor: 'white',
