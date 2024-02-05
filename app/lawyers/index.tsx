@@ -7,6 +7,7 @@ import { Dimensions } from "react-native"
 import layoutS from "@/styles/layout"
 import { extractListParams } from "@/util/routeHelpers"
 import { useRouteInfo } from "expo-router/build/hooks"
+import dataDummyLawyer from "@/constants/dummyLawyer"
 
 
 const LawyersSearchResultScreen = () => {
@@ -64,13 +65,20 @@ const LawyersSearchResultScreen = () => {
                 decelerationRate={0}
                 pagingEnabled
                 contentContainerStyle={{
-                    gap: 16
+                    gap: 16,
+                    paddingHorizontal: Platform.OS === 'android' ? Dimensions.get('window').width * 0.05 : 0
                 }}
                 snapToOffsets={dataDummyLawyer.map((_, index) => (Dimensions.get('window').width * 0.9 * index) + (16 * index))}
                 snapToAlignment={"center"}
+                contentInset={{ // iOS ONLY
+                    top: 0,
+                    left: Dimensions.get('window').width * 0.05,
+                    bottom: 0,
+                    right: Dimensions.get('window').width * 0.05
+                }}
             >
                 {dataDummyLawyer.map((lawyer, index) =>
-                    <View style={styles.card}>
+                    <View style={styles.card} key={`${lawyer.name}_${index}`}>
                         <ScrollView
                             nestedScrollEnabled={true}
                             horizontal
@@ -142,7 +150,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     wrapper: {
-        width: '90%',
+        width: '100%',
         height: '100%',
     },
     filterContainer: {
@@ -151,7 +159,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 8,
         borderRadius: 8,
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '90%',
+        alignSelf: 'center'
     },
     card: {
         width: Dimensions.get('screen').width * 0.9,
@@ -198,30 +208,4 @@ const styles = StyleSheet.create({
 })
 
 
-const dataDummyLawyer = [
-    {
-        name: 'DIANA CHENG',
-        kanzlei: 'Burgstaller & Schwarz',
-        location: 'Frankfurt am Main',
-        tags: ['Strafrecht', 'HomeOffice', 'Familien & Sozialrecht'],
-        photo_1: require('@/assets/images/lawyer_1_1.jpg'),
-        photo_2: require('@/assets/images/lawyer_1_2.jpg'),
-    },
-    {
-        name: 'JOHN SCHMIDT',
-        kanzlei: 'Schmidt',
-        location: 'Berlin',
-        tags: ['Socialrecht', 'Erbschaftrecht', 'Demonstrationsrecht', 'Strafrecht'],
-        photo_1: require('@/assets/images/lawyer_2_1.jpg'),
-        photo_2: require('@/assets/images/lawyer_2_2.jpg'),
-    },
-    {
-        name: 'EMMA ALBRECHT',
-        kanzlei: 'Schmidt',
-        location: 'Berlin',
-        tags: ['Mietminderung', 'HomeOffice', 'Strafrecht', 'Familienrecht'],
-        photo_1: require('@/assets/images/lawyer_3_1.jpg'),
-        photo_2: require('@/assets/images/lawyer_3_2.jpg'),
-    },
 
-]
