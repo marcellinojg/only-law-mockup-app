@@ -16,7 +16,7 @@ const SearchScreen = () => {
     const theme = useTheme()
     const [selectedTags, setSelectedTags] = useState<string[]>([])
     const [search, setSearch] = useState<string>("")
-    const [hideTrendingTags, setHideTrendingTags] = useState<boolean>(false)
+    const [searchMode, setSearchMode] = useState<boolean>(false)
     const countFoundLawyers = dataDummyLawyer.filter((lawyer) => lawyer.tags.some(tag => selectedTags.includes(tag))).length
 
     const handleAddTag = (tag: string) => {
@@ -26,7 +26,7 @@ const SearchScreen = () => {
     }
 
     const handleAddTagViaSearch = (tag: string) => {
-        setHideTrendingTags(false)
+        setSearchMode(false)
         Keyboard.dismiss()
         setSearch('')
         if (selectedTags.length >= 3 || selectedTags.includes(tag)) return
@@ -42,7 +42,7 @@ const SearchScreen = () => {
     return <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.primary }]}>
         <StatusBar style='light' />
         <View style={styles.wrapper}>
-            {!hideTrendingTags &&
+            {!searchMode &&
                 <>
                     <View style={[styles.sections, layoutS.flexColCenterStart]}>
                         <Text style={{ color: 'white' }} variant="bodyLarge">
@@ -85,7 +85,7 @@ const SearchScreen = () => {
                     </View>
                 </>
             }
-            {hideTrendingTags &&
+            {searchMode &&
                 <View style={{ flex: 8, paddingTop: 20 }}>
                     {search.length !== 0 &&
                         <>
@@ -122,7 +122,7 @@ const SearchScreen = () => {
                 </View>
             }
             <View style={[styles.sections, styles.sectionSearch]}>
-                {hideTrendingTags &&
+                {searchMode &&
                     <Text variant="bodyMedium" style={{ color: 'lightgray', alignSelf:'center' }}>
                         Suche nach Tags, Rechtsgebieten oder Anwälten:
                     </Text>
@@ -131,15 +131,15 @@ const SearchScreen = () => {
                     <TextInput
                         placeholder="Wir helfen dir!"
                         textColor="black"
-                        onFocus={() => setHideTrendingTags(true)}
-                        onEndEditing={() => setHideTrendingTags(false)}
+                        onFocus={() => setSearchMode(true)}
+                        onEndEditing={() => setSearchMode(false)}
                         style={{ backgroundColor: 'white', borderRadius: 6 }}
                         left={<TextInput.Icon icon={'magnify'} />}
                         value={search}
                         onChangeText={setSearch}
                     />
                 </DismissKeyboard>
-                {!hideTrendingTags &&
+                {!searchMode &&
                     <Link asChild href={`/lawyers?${buildListParams('tags', selectedTags)}`}>
                         <Button
                             mode="text"
