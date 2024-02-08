@@ -6,6 +6,10 @@ const dataDummyLawyer = [
         tags: ['Strafrecht', 'HomeOffice', 'Familien & Sozialrecht'],
         photo_1: require('@/assets/images/lawyer_1_1.jpg'),
         photo_2: require('@/assets/images/lawyer_1_2.jpg'),
+        rating1: 3,
+        rating2: 2.8,
+        rating3: 4.2,
+        rating4: 3.2,
     },
     {
         name: 'JOHN SCHMIDT',
@@ -14,6 +18,10 @@ const dataDummyLawyer = [
         tags: ['Socialrecht', 'Erbschaftrecht', 'Demonstrationsrecht', 'Strafrecht'],
         photo_1: require('@/assets/images/lawyer_2_1.jpg'),
         photo_2: require('@/assets/images/lawyer_2_2.jpg'),
+        rating1: 4.9,
+        rating2: 5,
+        rating3: 5,
+        rating4: 5,
     },
     {
         name: 'EMMA ALBRECHT',
@@ -22,6 +30,10 @@ const dataDummyLawyer = [
         tags: ['Mietminderung', 'HomeOffice', 'Strafrecht', 'Familienrecht'],
         photo_1: require('@/assets/images/lawyer_3_1.jpg'),
         photo_2: require('@/assets/images/lawyer_3_2.jpg'),
+        rating1: 4.9,
+        rating2: 4.8,
+        rating3: 4.9,
+        rating4: 4.7,
     },
 
     {
@@ -31,6 +43,10 @@ const dataDummyLawyer = [
         tags: ['Informationstechnologierecht', 'HomeOffice', 'Markenrecht', 'Familienrecht'],
         photo_1: require('@/assets/images/lawyer_3_1.jpg'),
         photo_2: require('@/assets/images/lawyer_3_2.jpg'),
+        rating1: 1,
+        rating2: 3,
+        rating3: 2,
+        rating4: 3,
     },
     {
         name: 'ANNIE HWANG',
@@ -39,6 +55,10 @@ const dataDummyLawyer = [
         tags: ['Informationstechnologierecht', 'Mustertag', 'Markenrecht', 'PolizeiKontrolle'],
         photo_1: require('@/assets/images/lawyer_1_1.jpg'),
         photo_2: require('@/assets/images/lawyer_1_2.jpg'),
+        rating1: 3.8,
+        rating2: 3.6,
+        rating3: 4.2,
+        rating4: 4.3,
     },
     {
         name: 'FRANZ STROMAN',
@@ -47,6 +67,10 @@ const dataDummyLawyer = [
         tags: ['Datenschutz', 'Mustertag', 'Sozialrecht'],
         photo_1: require('@/assets/images/lawyer_2_1.jpg'),
         photo_2: require('@/assets/images/lawyer_2_2.jpg'),
+        rating1: 4,
+        rating2: 2.8,
+        rating3: 1.2,
+        rating4: 4,
     },
     {
         name: 'SIEGBERT MANN',
@@ -55,6 +79,10 @@ const dataDummyLawyer = [
         tags: ['Schlagwort', 'Sorgerecht', 'Sorgerechtsverfuegung', 'Familienrecht'],
         photo_1: require('@/assets/images/lawyer_2_1.jpg'),
         photo_2: require('@/assets/images/lawyer_2_2.jpg'),
+        rating1: 5,
+        rating2: 4,
+        rating3: 4.3,
+        rating4: 3.7,
     },
 ]
 

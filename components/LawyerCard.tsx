@@ -1,18 +1,19 @@
 import layoutS from "@/styles/layout"
 import { Dimensions, StyleSheet, View, Image } from "react-native"
-import { Icon, TouchableRipple, Text, useTheme } from "react-native-paper"
+import { Icon, TouchableRipple, Text, useTheme, ProgressBar } from "react-native-paper"
 import PhotoScroller from "./PhotoScroller"
 import { extractListParams } from "@/util/routeHelpers"
 
 interface LawyerCardProps {
     lawyer: Lawyer,
-    tags: string
+    tags: string,
 }
 
 const LawyerCard = (props: LawyerCardProps) => {
     const { lawyer, tags } = props
     const tagsList = tags && extractListParams(tags)
     const theme = useTheme()
+    const RATING_SIZE = Dimensions.get('screen').width * 0.1
 
     return <View style={styles.card}>
         <PhotoScroller>
@@ -37,7 +38,25 @@ const LawyerCard = (props: LawyerCardProps) => {
                 <Icon source={'map-marker'} size={20} />
                 <Text>{lawyer.location}</Text>
             </View>
-            <View style={[layoutS.flexRowStartCenter, { flexWrap: 'wrap', marginTop: 12, gap: 8 }]}>
+            <View style={[layoutS.flexRowStartCenter, { gap: 12, marginVertical: 8 }]}>
+                <View style={{ gap: 4, alignItems: 'center' }}>
+                    <Icon source={'shield-sword'} size={24} />
+                    <ProgressBar progress={lawyer.rating1 / 5} style={{ width: RATING_SIZE }} />
+                </View>
+                <View style={{ gap: 4, alignItems: 'center' }}>
+                    <Icon source={'chat'} size={24} />
+                    <ProgressBar progress={lawyer.rating2 / 5} style={{ width: RATING_SIZE }} />
+                </View>
+                <View style={{ gap: 4, alignItems: 'center' }}>
+                    <Icon source={'feather'} size={24} />
+                    <ProgressBar progress={lawyer.rating3 / 5} style={{ width: RATING_SIZE }} />
+                </View>
+                <View style={{ gap: 4, alignItems: 'center' }}>
+                    <Icon source={'handshake'} size={24} />
+                    <ProgressBar progress={lawyer.rating4 / 5} style={{ width: RATING_SIZE }} />
+                </View>
+            </View>
+            <View style={[layoutS.flexRowStartCenter, { flexWrap: 'wrap', marginTop: 4, gap: 8 }]}>
                 {lawyer.tags.map((tag, index) =>
                     <View
                         style={[layoutS.flexRowCenter, styles.categoryTagInfo, { borderColor: tags && tagsList.includes(tag) ? theme.colors.secondary : 'black' }]}
@@ -51,7 +70,6 @@ const LawyerCard = (props: LawyerCardProps) => {
                         </Text>
                     </View>
                 )}
-
             </View>
         </View>
         <TouchableRipple onPress={() => { }} style={styles.anfrageButton}>
